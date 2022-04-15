@@ -58,5 +58,6 @@ async function handleRequest(request) {
     return annotation
   }
 
+  console.log(annotation)
   return addBookmark(annotation)
 }
