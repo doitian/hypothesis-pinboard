@@ -48,16 +48,15 @@ async function addBookmark(annotation) {
  */
 async function handleRequest(request) {
   const url = new URL(request.url)
-  console.log(url)
 
-  // https://hypothesis-pinboard.doitian.workers.dev/https://hypothes.is/a/RjuHSrr0Eey-hmukl1Mumg
   const annotationURL = `https://${url.pathname.split(/:\/\/?/, 2)[1]}`
-  const annotation = await fetchAnnotation(annotationURL)
-
-  if (request.method == 'GET') {
-    return annotation
+  console.log(annotationURL)
+  const annotationResponse = await fetchAnnotation(annotationURL)
+  if (request.method == 'GET' || !annotationResponse.ok) {
+    return annotationResponse
   }
 
+  const annotation = await annotationResponse.json()
   console.log(annotation)
   return addBookmark(annotation)
 }
