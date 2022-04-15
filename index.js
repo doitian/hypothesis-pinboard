@@ -32,6 +32,7 @@ async function addBookmark(annotation) {
     url: annotation.uri,
     description: annotation.document.title[0],
     replace: 'no',
+    format: 'json',
   })
   const resp = await fetch(`https://api.pinboard.in/v1/posts/add?${params}`, {
     headers: {
