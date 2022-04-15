@@ -27,7 +27,7 @@ async function fetchAnnotation(annotationURL) {
 }
 
 async function addBookmark(annotation) {
-  const params = URLSearchParams({
+  const params = new URLSearchParams({
     auth_token: PINBOARD_TOKEN,
     url: annotation.uri,
     description: annotation.document.title[0],
