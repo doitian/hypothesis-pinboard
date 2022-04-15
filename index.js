@@ -39,7 +39,7 @@ async function addBookmark(annotation) {
     },
   })
 
-  return respondWithJSON({ duplicated: !resp.ok })
+  return new Response(resp.body, { status: 200, headers: resp.headers })
 }
 
 /**
