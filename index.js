@@ -31,6 +31,7 @@ async function addBookmark(annotation) {
     auth_token: PINBOARD_TOKEN,
     url: annotation.uri,
     description: annotation.document.title[0],
+    tags: 'highlighted from/hypothesis',
     replace: 'no',
     format: 'json',
   })
