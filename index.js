@@ -16,19 +16,19 @@ function getAnnotationAPIEndpoint(annotationURL) {
   return parts.join('/')
 }
 
-async function fetchAnnotation(annotationURL) {
+async function fetchAnnotation(annotationURL, hypothesisToken) {
   return fetch(getAnnotationAPIEndpoint(annotationURL), {
     headers: {
-      authorization: `Bearer ${HYPOTHESIS_TOKEN}`,
+      authorization: `Bearer ${hypothesisToken}`,
       accept: 'application/json',
       'content-type': 'application/json',
     },
   })
 }
 
-async function addBookmark(annotation) {
+async function addBookmark(annotation, pinboardToken) {
   const params = new URLSearchParams({
-    auth_token: PINBOARD_TOKEN,
+    auth_token: pinboardToken,
     url: annotation.uri,
     description: annotation.document.title[0],
     tags: 'highlighted from/hypothesis',
@@ -53,12 +53,15 @@ async function handleRequest(request) {
 
   const annotationURL = `https://${url.pathname.split(/:\/\/?/, 2)[1]}`
   console.log(annotationURL)
-  const annotationResponse = await fetchAnnotation(annotationURL)
+  const annotationResponse = await fetchAnnotation(
+    annotationURL,
+    request.headers.get('x-hypothesis-token'),
+  )
   if (request.method == 'GET' || !annotationResponse.ok) {
     return annotationResponse
   }
 
   const annotation = await annotationResponse.json()
   console.log(annotation)
-  return addBookmark(annotation)
+  return addBookmark(annotation, request.headers.get('x-pinboard-token'))
 }
